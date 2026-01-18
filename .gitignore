@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+venv/
+env/
+*.log
+scraped_data/
+chromedriver.exe
+*.csv
+*.json
+.DS_Store
