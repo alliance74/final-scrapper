@@ -18,6 +18,7 @@ A complete, production-ready web scraping and API system for Greek events and de
 ## 📋 Quick Links
 
 - **[🚀 Get Started (3 Steps)](GET_STARTED.md)** ⭐ START HERE
+- **[🚂 Railway Deployment](RAILWAY_DEPLOY.md)** ⭐ WORKS ON RAILWAY!
 - **[📚 Documentation Index](DOCS_INDEX.md)** - All docs
 - **[5-Minute Deploy Guide](QUICKSTART.md)** ⚡
 - **[Full Deployment Guide](DEPLOYMENT.md)** 📚
@@ -437,3 +438,5 @@ MIT License - Use freely for your projects!
 ---
 
 **Made with ❤️ for the Greek events community**
+#   s c r a p e r - f o r - m a z i -  
+ 
