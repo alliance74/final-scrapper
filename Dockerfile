@@ -24,12 +24,12 @@ COPY . .
 # Create directory for scraped data
 RUN mkdir -p scraped_data
 
-# Expose port
+# Expose port (Railway will set PORT env var)
 EXPOSE 8000
 
 # Set environment variables
 ENV HEADLESS_MODE=True
 ENV CHROME_DRIVER_PATH=auto
 
-# Run the application
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the application (use PORT env var from Railway, default to 8000)
+CMD uvicorn api:app --host 0.0.0.0 --port ${PORT:-8000}
