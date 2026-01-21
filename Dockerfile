@@ -1,8 +1,9 @@
+# Updated: 2026-01-22 - Install ChromeDriver for Railway
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install Chrome and ChromeDriver
+# Install Chrome and ChromeDriver (Fixed version for reliability)
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
@@ -14,13 +15,15 @@ RUN apt-get update && apt-get install -y \
     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
     && apt-get update \
     && apt-get install -y google-chrome-stable \
-    && CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1) \
-    && CHROMEDRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_$CHROME_VERSION") \
-    && wget -q "https://storage.googleapis.com/chrome-for-testing-public/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip" -O /tmp/chromedriver.zip \
+    && wget -q "https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.87/linux64/chromedriver-linux64.zip" -O /tmp/chromedriver.zip \
     && unzip /tmp/chromedriver.zip -d /tmp \
     && mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver \
     && chmod +x /usr/local/bin/chromedriver \
-    && rm -rf /var/lib/apt/lists/* /tmp/google-chrome-key.pub /tmp/chromedriver.zip /tmp/chromedriver-linux64
+    && rm -rf /var/lib/apt/lists/* /tmp/*.pub /tmp/*.zip /tmp/chromedriver-linux64 \
+    && chromedriver --version
+
+# Verify Chrome and ChromeDriver are installed
+RUN google-chrome --version && chromedriver --version
 
 # Copy requirements and install Python dependencies
 COPY requirements.txt .
