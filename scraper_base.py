@@ -21,6 +21,8 @@ class BaseScraper:
         
     def setup_driver(self):
         """Initialize Chrome driver with options"""
+        import os
+        
         chrome_options = Options()
         
         if self.headless:
@@ -39,17 +41,37 @@ class BaseScraper:
         
         print("Setting up Chrome driver...")
         
-        # Use the ChromeDriver from config
+        # Try to find ChromeDriver in common locations
+        driver_path = None
+        
+        # Check if explicitly configured
+        if config.CHROME_DRIVER_PATH and config.CHROME_DRIVER_PATH != 'auto':
+            driver_path = config.CHROME_DRIVER_PATH
+        else:
+            # Look for ChromeDriver in common locations (for Railway/Docker)
+            possible_paths = [
+                '/usr/local/bin/chromedriver',
+                '/usr/bin/chromedriver',
+                'chromedriver'
+            ]
+            
+            for path in possible_paths:
+                if os.path.exists(path) or path == 'chromedriver':
+                    driver_path = path
+                    break
+        
+        # Initialize Chrome with the found driver
         try:
-            if config.CHROME_DRIVER_PATH and config.CHROME_DRIVER_PATH != 'auto':
-                service = ChromeService(executable_path=config.CHROME_DRIVER_PATH)
+            if driver_path and driver_path != 'chromedriver':
+                service = ChromeService(executable_path=driver_path)
                 self.driver = webdriver.Chrome(service=service, options=chrome_options)
-                print(f"✓ Using ChromeDriver from: {config.CHROME_DRIVER_PATH}")
+                print(f"✓ Using ChromeDriver from: {driver_path}")
             else:
                 self.driver = webdriver.Chrome(options=chrome_options)
                 print("✓ Using system ChromeDriver")
         except Exception as e:
             print(f"✗ Failed to initialize Chrome: {e}")
+            print(f"  Tried path: {driver_path}")
             raise
         
         # Try to maximize window, but don't fail if it doesn't work
